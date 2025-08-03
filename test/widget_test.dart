@@ -7,13 +7,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:ma_so_thue/data/repositories/users_repositories.dart';
 
 import 'package:ma_so_thue/main.dart';
-
+class MockAuthRepository extends Fake implements AuthRepository {}
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    final mockRepo = MockAuthRepository();
+    await tester.pumpWidget(MyApp(mockRepo, initialRoute: '/home'));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

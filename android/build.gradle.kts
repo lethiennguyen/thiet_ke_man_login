@@ -19,3 +19,8 @@ subprojects {
 tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
 }
+dependencies {
+    implementation("androidx.annotation:annotation-jvm:1.9.1")
+}
+
+private fun DependencyHandlerScope.implementation(string: kotlin.String) {}
