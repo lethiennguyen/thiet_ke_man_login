@@ -6,18 +6,26 @@ import 'package:ma_so_thue/hive/hive_constants.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
 
-class AuthBloc extends Bloc<AuthEvent, AuthState> {
+class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final AuthRepository repository;
 
-  AuthBloc(this.repository) : super(AuthState.initial()) {
+  LoginBloc(this.repository) : super(const LoginState()) {
+    on<LoginUsernameChanged>((event, emit) {
+      emit(state.copyWith(username: event.username));
+    });
+    on<LoginPasswordChanged>((event, emit) {
+      emit(state.copyWith(password: event.password));
+    });
+    on<LoginTaxCodeChanged>((event, emit) {
+      emit(state.copyWith(taxCode: event.taxCode));
+    });
     on<LoginRequested>(_onLoginRequested);
   }
-
   Future<void> _onLoginRequested(
     LoginRequested event,
-    Emitter<AuthState> emit,
+    Emitter<LoginState> emit,
   ) async {
-    emit(AuthState(status: AuthStatus.loading));
+    emit(LoginState(status: LoginStatus.loading));
     try {
       await repository.postUserProviders(
         tax_code: int.parse(event.taxCode),
@@ -30,12 +38,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       box.put(HiveKeys.password, event.password);
       box.put('isLoggedIn', true);
       await Future.delayed(Duration(milliseconds: 100));
-      emit(AuthState(status: AuthStatus.success));
+      emit(LoginState(status: LoginStatus.success));
     } catch (e) {
       print('Lỗi đăng nhập: $e');
-      emit(
-        AuthState(status: AuthStatus.failure, message: 'Đăng nhập thất bại'),
-      );
+      emit(LoginState(status: LoginStatus.failure));
     }
   }
 }

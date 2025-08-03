@@ -1,17 +1,3 @@
-import 'package:ma_so_thue/data/models/product.dart';
-
-class ProductListResponse {
-  final List<Product> data;
-
-  ProductListResponse({required this.data});
-
-  factory ProductListResponse.fromJson(Map<String, dynamic> json) {
-    return ProductListResponse(
-      data: List<Product>.from(json['data'].map((e) => Product.fromJson(e))),
-    );
-  }
-}
-
 class ApiSingleResponse<T> {
   final bool success;
   final String message;

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:ma_so_thue/navigation/nav_item.dart';
 import 'package:ma_so_thue/ui/common/app_colors.dart';
 import 'package:ma_so_thue/ui/home/home_customer_information.dart';
@@ -13,16 +12,6 @@ class LogoutPage extends StatefulWidget {
 }
 
 class _LogoutPageState extends State<LogoutPage> {
-  late final String tendangnhap;
-  late final String mst;
-  @override
-  void initState() {
-    super.initState();
-    final box = Hive.box('authBox');
-    tendangnhap = box.get('taiKhoan');
-    mst = box.get('maSoThue');
-  }
-
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
@@ -118,7 +107,6 @@ class _NavButton extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Gạch chỉ thị
             AnimatedContainer(
               duration: const Duration(milliseconds: 200),
               height: 3,

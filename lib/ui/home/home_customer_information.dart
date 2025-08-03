@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:ma_so_thue/hive/hive_constants.dart';
 
 class LogoutScreen extends StatelessWidget {
   const LogoutScreen({super.key});
 
   Future<void> _onLogout(BuildContext context) async {
-    final box = Hive.box('authBox');
+    final box = Hive.box(HiveBoxNames.auth);
     box.put('isLoggedIn', false);
-
     Navigator.pushReplacementNamed(context, '/login');
   }
 

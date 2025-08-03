@@ -3,8 +3,6 @@ import 'package:hive/hive.dart';
 import 'package:ma_so_thue/data/core/constants.dart';
 import 'package:ma_so_thue/data/dio/dio.dart';
 import 'package:ma_so_thue/data/models/product.dart';
-import 'package:ma_so_thue/data/models/product_delete.dart';
-import 'package:ma_so_thue/data/request/product_detail_request.dart';
 import 'package:ma_so_thue/data/request/product_request.dart';
 import 'package:ma_so_thue/data/response/product_respone.dart';
 import 'package:ma_so_thue/hive/hive_constants.dart';
@@ -21,9 +19,11 @@ class ProductRepository {
         queryParameters: request.toQueryParams(),
         options: Options(headers: {'Authorization': token}),
       );
-      final productListResponse = ProductListResponse.fromJson(response.data);
-
-      return productListResponse.data;
+      final apiResponse = ApiListResponse<Product>.fromJson(
+        response.data,
+        (json) => Product.fromJson(json as Map<String, dynamic>),
+      );
+      return apiResponse.data;
     } on DioException catch (e) {
       print('DioException: ${e.response?.statusCode}');
       print('Response body: ${e.response?.data}');
@@ -35,23 +35,21 @@ class ProductRepository {
 class ProductDetailRepository {
   ProductDetailRepository(dio);
 
-  Future<Product> getProductDetail(ProductRequestID request) async {
-    final box = Hive.box(HiveBoxNames.auth); // lấy token
+  Future<Product> getProductDetail(int id) async {
+    final box = Hive.box(HiveBoxNames.auth);
     final token = box.get(HiveKeys.token) ?? '';
     try {
       final response = await dio.get(
-        '${ApiConfig.productDetial}${request.id}',
+        '${ApiConfig.productDetial}${id}',
         options: Options(headers: {'Authorization': token}),
       );
-
       print('respon: $response');
 
-      final apiRes =
-          ApiSingleResponse<Product>.fromJson(
-            response.data,
-            (json) => Product.fromJson(json as Map<String, dynamic>), //ép kiểu
-          ).data;
-      return apiRes;
+      final apiRes = ApiSingleResponse<Product>.fromJson(
+        response.data,
+        (json) => Product.fromJson(json as Map<String, dynamic>),
+      );
+      return apiRes.data;
     } on DioException catch (e) {
       print('DioException: ${e.response?.statusCode}');
       print('Response body: ${e.response?.data}');
@@ -59,7 +57,7 @@ class ProductDetailRepository {
     }
   }
 
-  Future<ApiResponseNoData> deleteProduct(int id) async {
+  Future<bool> deleteProduct(int id) async {
     final box = Hive.box(HiveBoxNames.auth);
     final token = box.get(HiveKeys.token) ?? '';
 
@@ -68,8 +66,7 @@ class ProductDetailRepository {
       options: Options(headers: {'Authorization': token}),
     );
     print('$response');
-    final apiRes = ApiResponseNoData.fromJson(response.data);
-    return apiRes;
+    return response.statusCode == 200;
   }
 
   Future<Product?> putProductUpdate(
@@ -94,9 +91,6 @@ class ProductDetailRepository {
         options: Options(headers: {'Authorization': token}),
       );
       print('respon : $response');
-      if (response == null) {
-        return null;
-      }
 
       return Product.fromJson(response.data['data']);
     } on DioException catch (e) {
@@ -129,9 +123,7 @@ class CreateProductRepository {
         },
         options: Options(headers: {'Authorization': token}),
       );
-      if (response == null) {
-        return null;
-      }
+
       return Product.fromJson(response.data['data']);
     } on DioException catch (e) {
       print('DioException: ${e.response?.statusCode}');

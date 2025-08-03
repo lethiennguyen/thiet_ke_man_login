@@ -1,4 +1,3 @@
-// widgets/image_picker_widget.dart
 import 'dart:io';
 
 import 'package:flutter/material.dart';

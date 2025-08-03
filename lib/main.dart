@@ -6,8 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:ma_so_thue/app_routes.dart';
 import 'package:ma_so_thue/blocs/auth/auth_bloc.dart';
+import 'package:ma_so_thue/blocs/product/cart_cubit.dart';
 import 'package:ma_so_thue/blocs/product/list_product_cubit.dart';
-import 'package:ma_so_thue/blocs/product/product_detail_cubit.dart';
 import 'package:ma_so_thue/data/core/constants.dart';
 import 'package:ma_so_thue/data/repositories/users_repositories.dart';
 import 'package:ma_so_thue/hive/hive_constants.dart';
@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MultiBlocProvider(
         providers: [
-          BlocProvider(create: (_) => AuthBloc(authRepo)),
+          BlocProvider(create: (_) => LoginBloc(authRepo)),
           BlocProvider(
             create: (_) {
               final cubit = ListProductCubit(productRepo);

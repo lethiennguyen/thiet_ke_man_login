@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:ma_so_thue/base/asset/base_asset.dart';
+import 'package:ma_so_thue/blocs/product/cart_cubit.dart';
 import 'package:ma_so_thue/blocs/product/image_cubit.dart';
 import 'package:ma_so_thue/blocs/product/list_product_cubit.dart';
 import 'package:ma_so_thue/blocs/product/product_detail_cubit.dart';
@@ -81,7 +82,7 @@ class FormProductInformation extends State<ProductInformation> {
           icon: Image.asset(IconsAssets.shopping_cart),
           tooltip: 'Giỏ hàng',
         ),
-        SizedBox(width: 8), // Cho icon cách mép phải 1 tí nhìn cho thoáng
+        SizedBox(width: 8),
       ],
     );
   }

@@ -19,9 +19,9 @@ extension ProductFieldExtentsion on ProductField {
       case ProductField.name:
         return "Tên sản pẩm";
       case ProductField.price:
-        return "Điền giá";
+        return "Giá";
       case ProductField.quantity:
-        return "Diền số lượng";
+        return "Số lượng";
     }
   }
 

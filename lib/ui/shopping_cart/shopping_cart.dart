@@ -3,8 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:ma_so_thue/blocs/product/product_detail_cubit.dart';
-import 'package:ma_so_thue/hive/shopping_cart/hive_shopping_cart.dart';
+import 'package:ma_so_thue/base/asset/base_asset.dart';
+import 'package:ma_so_thue/blocs/product/cart_cubit.dart';
+import 'package:ma_so_thue/blocs/product/cart_state.dart';
 import 'package:ma_so_thue/ui/common/app_colors.dart';
 
 class ShoppingCart extends StatefulWidget {
@@ -19,15 +20,13 @@ class FromShoppingCart extends State<ShoppingCart> {
 
   late final String productId;
   late final VoidCallback? onDismissed;
-  bool isChecked = false;
-
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CartCubit, List<CartItem>>(
+    return BlocBuilder<CartCubit, CartState>(
       builder: (context, state) {
         return Scaffold(
           backgroundColor: Color(0xffEFEFEF),
-          appBar: appBar(),
+          appBar: appBar(state),
           body: bodyShoppingCart(state),
           bottomNavigationBar: bottomNavigatorBar(state),
         );
@@ -35,7 +34,7 @@ class FromShoppingCart extends State<ShoppingCart> {
     );
   }
 
-  PreferredSizeWidget appBar() {
+  PreferredSizeWidget appBar(CartState state) {
     return AppBar(
       leading: IconButton(
         onPressed: () {
@@ -57,25 +56,33 @@ class FromShoppingCart extends State<ShoppingCart> {
       ),
       actions: [
         IconButton(
-          onPressed: () {
-            Navigator.of(context).pop(true);
-          },
-          icon: Image.asset("asset/trash_can.png"),
+          onPressed:
+              state.selectedIds.isEmpty
+                  ? null
+                  : () {
+                    for (final id in state.selectedIds) {
+                      context.read<CartCubit>().removeFromCart(
+                        int.parse(id.toString()),
+                      );
+                    }
+                    setState(() => state.selectedIds.clear());
+                  },
+          icon: Image.asset(IconsAssets.trash_can),
         ),
         SizedBox(width: 8),
       ],
     );
   }
 
-  Widget bodyShoppingCart(List<CartItem> state) {
+  Widget bodyShoppingCart(CartState state) {
     return ListView.builder(
-      itemCount: state.length,
+      itemCount: state.cartItems.length,
       itemBuilder: (context, index) {
-        final item = state[index];
+        final item = state.cartItems[index];
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
           child: itemProductShoppingCart(
-            productId: item.id.toString(),
+            productId: item.id,
             name: item.name,
             price: item.price,
             quatily: item.quantity,
@@ -83,6 +90,8 @@ class FromShoppingCart extends State<ShoppingCart> {
             onDelete: () {
               context.read<CartCubit>().removeFromCart(item.id);
             },
+            state: state,
+            context: context,
           ),
         );
       },
@@ -90,20 +99,21 @@ class FromShoppingCart extends State<ShoppingCart> {
   }
 
   Widget itemProductShoppingCart({
-    required String productId,
+    required int productId,
     required String name,
     required int price,
     required int quatily,
     required String cover,
     required VoidCallback? onDelete,
+    required CartState state,
+    required BuildContext context,
   }) {
     return Slidable(
-      key: Key(productId),
+      key: Key(productId.toString()),
       endActionPane: ActionPane(
         motion: const ScrollMotion(),
         children: [
           SlidableAction(
-            // An action can be bigger than the others.
             flex: 2,
             onPressed: (context) => onDelete?.call(),
             backgroundColor: Colors.red,
@@ -123,12 +133,11 @@ class FromShoppingCart extends State<ShoppingCart> {
           children: [
             SizedBox(width: 10),
             Checkbox(
-              value: isChecked,
-              onChanged: (bool? value) {
-                setState(() {
-                  isChecked = value!;
-                });
+              value: state.selectedIds.contains(productId),
+              onChanged: (v) {
+                context.read<CartCubit>().toggleItemChecked(productId);
               },
+
               activeColor: kBrandOrange,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(4),
@@ -275,7 +284,7 @@ class FromShoppingCart extends State<ShoppingCart> {
     );
   }
 
-  Widget bottomNavigatorBar(List<CartItem> state) {
+  Widget bottomNavigatorBar(CartState state) {
     return Container(
       height: 100,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -293,12 +302,13 @@ class FromShoppingCart extends State<ShoppingCart> {
                 Transform.scale(
                   scale: 1.2,
                   child: Checkbox(
-                    value: isChecked,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        isChecked = value!;
-                      });
-                    },
+                    value:
+                        state.selectedIds.length == state.cartItems.length &&
+                        state.cartItems.isNotEmpty,
+                    onChanged:
+                        (v) => context.read()<CartCubit>().toggleAllChecked(
+                          v == true,
+                        ),
                     activeColor: kBrandOrange,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(4),
@@ -335,7 +345,7 @@ class FromShoppingCart extends State<ShoppingCart> {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  '1.000.000 ₫',
+                  '${currencyFormatter.format(context.read<CartCubit>().selectedTotalPrice)} ₫',
                   style: GoogleFonts.nunitoSans(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,

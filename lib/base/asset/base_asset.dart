@@ -3,11 +3,17 @@ class Assets {
 }
 
 class Pictures extends Assets {
-  static const String image1 = "${Assets.base}images/hinh1.png";
-  static const String image2 = "${Assets.base}images/hinh2.jpg";
+  static const String logo = "${Assets.base}Frame427324088.svg";
 }
 
 class IconsAssets extends Assets {
   static const String shopping_cart = "${Assets.base}shopping_cart.png";
   static const String start = "${Assets.base}start.svg";
+  static const String eye_slash = "${Assets.base}eye-slash.svg";
+  static const String eye = "${Assets.base}eye.svg";
+  static const String clear = "${Assets.base}clear.svg";
+  static const String headphone = "${Assets.base}headphone.svg";
+  static const String Social_link = "${Assets.base}Social_link.svg";
+  static const String search_normal = "${Assets.base}search-normal.svg";
+  static const String trash_can = "${Assets.base}trash_can.png";
 }

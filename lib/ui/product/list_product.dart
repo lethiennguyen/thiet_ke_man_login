@@ -4,12 +4,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:ma_so_thue/base/asset/base_asset.dart';
+import 'package:ma_so_thue/blocs/product/cart_cubit.dart';
 import 'package:ma_so_thue/blocs/product/list_product_cubit.dart';
 import 'package:ma_so_thue/blocs/product/list_product_state.dart';
-import 'package:ma_so_thue/blocs/product/product_detail_cubit.dart';
 import 'package:ma_so_thue/data/models/product.dart';
+import 'package:ma_so_thue/enums/product_type.dart';
 import 'package:ma_so_thue/hive/shopping_cart/hive_shopping_cart.dart';
-import 'package:ma_so_thue/navigation/product_type.dart';
 import 'package:ma_so_thue/ui/common/app_colors.dart';
 
 class ProductList extends StatefulWidget {
@@ -48,11 +48,7 @@ class ProductListScreen extends State<ProductList> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: SvgPicture.asset(
-          'asset/Frame427324088.svg',
-          width: 158,
-          height: 37,
-        ),
+        title: SvgPicture.asset(Pictures.logo, width: 158, height: 37),
         backgroundColor: Colors.white,
         elevation: 0,
         actions: [
@@ -74,7 +70,6 @@ class ProductListScreen extends State<ProductList> {
       body: BlocBuilder<ListProductCubit, ListProductState>(
         builder: (context, state) {
           print('UI nhận được: ${state.products.length} sản phẩm');
-
           if (state.status == ListProductStatus.loading &&
               state.products.isEmpty) {
             return const Center(child: CircularProgressIndicator());
@@ -99,7 +94,7 @@ class ProductListScreen extends State<ProductList> {
     return RefreshIndicator(
       onRefresh: () => context.read<ListProductCubit>().pullToRefresh(),
       child: CustomScrollView(
-        controller: _scroll, // vẫn dùng cùng controller
+        controller: _scroll,
         slivers: [
           SliverToBoxAdapter(child: SizedBox(height: 10)),
           SliverToBoxAdapter(

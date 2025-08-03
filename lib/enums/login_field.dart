@@ -35,14 +35,23 @@ extension AuthUserExtentsion on LoginField {
     }
   }
 
-  String get fieldValidator {
+  String? validate(String? value) {
     switch (this) {
       case LoginField.tax_code:
-        return "Mã số thuế phải đúng 10 ký tự";
+        value = (value ?? '').trim();
+        if (value.length != 10) return "Mã số thuế phải đúng 10 ký tự";
+        return null;
       case LoginField.user_name:
-        return "Tài khoản không được để trống";
+        if ((value ?? '').trim().isEmpty)
+          return "Tài khoản không được để trống";
+        return null;
       case LoginField.password:
-        return "Mật khẩu phải từ 6 đến 50 ký tự";
+        value = (value ?? '').trim();
+        if (value.length < 6 || value.length > 50)
+          return "Mật khẩu từ 6 đến 50 ký tự";
+        return null;
     }
   }
+
+  bool get isPassword => this == LoginField.password;
 }
