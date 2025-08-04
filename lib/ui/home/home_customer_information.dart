@@ -8,12 +8,14 @@ class LogoutScreen extends StatelessWidget {
   Future<void> _onLogout(BuildContext context) async {
     final box = Hive.box(HiveBoxNames.auth);
     box.put('isLoggedIn', false);
+    await box.delete(HiveKeys.token);
     Navigator.pushReplacementNamed(context, '/login');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(title: const Text('Trang chính')),
       body: Center(
         child: ElevatedButton.icon(

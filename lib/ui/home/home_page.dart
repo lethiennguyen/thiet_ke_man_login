@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ma_so_thue/navigation/nav_item.dart';
 import 'package:ma_so_thue/ui/common/app_colors.dart';
 import 'package:ma_so_thue/ui/home/home_customer_information.dart';
+import 'package:ma_so_thue/ui/navigation/nav_item.dart';
 import 'package:ma_so_thue/ui/product/list_product.dart';
 
 class LogoutPage extends StatefulWidget {
@@ -59,14 +59,12 @@ class _LogoutPageState extends State<LogoutPage> {
           ),
         ),
         Positioned(
-          top: 0, // Cách đáy một chút cho đẹp
-          left: 0,
-          right: 0,
+          bottom: 10,
           child: GestureDetector(
             onTap: () => Navigator.pushNamed(context, '/add_product'),
             child: Container(
-              width: 60,
-              height: 60,
+              width: 55,
+              height: 55,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: kBrandOrange,

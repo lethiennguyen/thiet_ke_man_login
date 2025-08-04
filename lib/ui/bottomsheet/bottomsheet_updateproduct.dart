@@ -80,7 +80,7 @@ class _ShowModelBottomSheetUpDateProductState
                 BlocBuilder<ImageCubit, ImageState>(
                   builder: (context, state) {
                     return ImagePickerWidget(
-                      label: 'Ảnh đại diện',
+                      label: 'Ảnh sản phẩm',
                       width: 200,
                       height: 200,
                       imageUrl: state.imageUrl,

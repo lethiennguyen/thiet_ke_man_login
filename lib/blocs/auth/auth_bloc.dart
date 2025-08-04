@@ -10,7 +10,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final AuthRepository repository;
 
   LoginBloc(this.repository) : super(const LoginState()) {
-    on<LoginUsernameChanged>((event, emit) {
+    /*on<LoginUsernameChanged>((event, emit) {
       emit(state.copyWith(username: event.username));
     });
     on<LoginPasswordChanged>((event, emit) {
@@ -18,9 +18,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     });
     on<LoginTaxCodeChanged>((event, emit) {
       emit(state.copyWith(taxCode: event.taxCode));
-    });
+    });*/
     on<LoginRequested>(_onLoginRequested);
   }
+
   Future<void> _onLoginRequested(
     LoginRequested event,
     Emitter<LoginState> emit,

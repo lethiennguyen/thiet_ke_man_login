@@ -17,3 +17,7 @@ class IconsAssets extends Assets {
   static const String search_normal = "${Assets.base}search-normal.svg";
   static const String trash_can = "${Assets.base}trash_can.png";
 }
+
+class Lotteri extends Assets {
+  static const String loading = "${Assets.base}lotteri/Animation_loading.json";
+}

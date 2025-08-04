@@ -5,6 +5,7 @@ import 'package:ma_so_thue/blocs/product/create_prodcut_cubit.dart';
 import 'package:ma_so_thue/blocs/product/create_prodcut_state.dart';
 import 'package:ma_so_thue/blocs/product/image_cubit.dart';
 import 'package:ma_so_thue/blocs/product/image_state.dart';
+import 'package:ma_so_thue/blocs/product/list_product_cubit.dart';
 import 'package:ma_so_thue/data/models/product.dart';
 import 'package:ma_so_thue/data/upload_image/upload_image_network.dart';
 import 'package:ma_so_thue/enums/product_field.dart';
@@ -55,7 +56,7 @@ class buildAddPProdcut extends State<AddProcduct> {
                   BlocBuilder<ImageCubit, ImageState>(
                     builder: (context, state) {
                       return ImagePickerWidget(
-                        label: 'Ảnh đại diện',
+                        label: 'Ảnh sản phẩm',
                         width: 200,
                         height: 200,
                         imageUrl: state.imageUrl,
@@ -100,13 +101,20 @@ class buildAddPProdcut extends State<AddProcduct> {
       padding: const EdgeInsets.all(16.0),
       child: GestureDetector(
         onTap: () {
-          final imageUrl = context.read<ImageCubit>().state.imageUrl;
+          var imageUrl = context.read<ImageCubit>().state.imageUrl;
           context.read<CreateProductCubit>().createprodcut(
             name: _nameController.text,
             price: int.parse(_priceController.text),
             quantity: int.parse(_quantityController.text),
             cover: imageUrl.toString(),
           );
+          context.read<ListProductCubit>().loadFirstPage();
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Thêm thành công')));
+          _nameController.clear();
+          _priceController.clear();
+          _quantityController.clear();
         },
         child: Container(
           width: 200,

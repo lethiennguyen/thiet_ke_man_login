@@ -14,7 +14,7 @@ class LoginRequested extends LoginEvent {
   List<Object?> get props => [taxCode, username, password];
 }
 
-class LoginUsernameChanged extends LoginEvent {
+/*class LoginUsernameChanged extends LoginEvent {
   final String username;
   LoginUsernameChanged(this.username);
 
@@ -36,4 +36,4 @@ class LoginTaxCodeChanged extends LoginEvent {
 
   @override
   List<Object?> get props => [taxCode];
-}
+}*/
