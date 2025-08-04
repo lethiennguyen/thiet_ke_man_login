@@ -56,14 +56,11 @@ class CartCubit extends Cubit<CartState> {
     }
   }
 
-  /// Xóa sản phẩm khỏi giỏ
   void removeFromCart(int id) {
     final item = cartBox.values.firstWhere((e) => e.id == id);
     item?.delete();
-    // Không cần emit, listener của box đã tự cập nhật UI
   }
 
-  /// Xóa toàn bộ giỏ hàng
   void clearCart() {
     cartBox.clear();
   }

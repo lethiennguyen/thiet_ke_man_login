@@ -6,7 +6,7 @@ extension ProductFieldExtentsion on ProductField {
   String get lable {
     switch (this) {
       case ProductField.name:
-        return "Tên sản pẩm";
+        return "Tên sản phẩm";
       case ProductField.price:
         return "Giá";
       case ProductField.quantity:
@@ -17,7 +17,7 @@ extension ProductFieldExtentsion on ProductField {
   String get hint {
     switch (this) {
       case ProductField.name:
-        return "Tên sản pẩm";
+        return "Tên sản phẩm";
       case ProductField.price:
         return "Giá";
       case ProductField.quantity:
